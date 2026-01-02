@@ -36,3 +36,12 @@
     - Added placeholders/TODOs for Image Gen, Audio Gen, and Video Gen API calls in respective steps.
     - Maintained the fallback/mock logic so the pipeline remains runnable without keys.
 - Added `openai` to `requirements.txt` and installed it.
+
+### Question: 使用的达模型可以参考 `https://github.com/FujiwaraChoki/MoneyPrinter.git` ，用中国大模型代替，在.env.example里写上网址和获取方法
+
+**Worknote:**
+- Updated `.env.example` to recommend Chinese LLMs (Moonshot/Kimi, DeepSeek, Zhipu AI) instead of OpenAI.
+- Provided specific API Key acquisition URLs and Base URLs for these Chinese models.
+- Updated `pipeline.py` to initialize an OpenAI-compatible client using `LLM_BASE_URL` and `LLM_API_KEY`, supporting these Chinese providers.
+- Updated `.trae/rules/pipline.md` to specify Chinese LLMs as the recommended models.
+- Created `tools/overall.md` analyzing `MoneyPrinter` and its relation to our architecture.

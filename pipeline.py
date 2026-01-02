@@ -6,9 +6,27 @@ from moviepy import ImageClip, concatenate_videoclips, AudioFileClip, TextClip, 
 import time
 import random
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
+
+# Initialize LLM Client (OpenAI Compatible)
+# Support for Chinese models like Moonshot, DeepSeek, Zhipu via OpenAI SDK
+llm_client = None
+llm_api_key = os.getenv("LLM_API_KEY")
+llm_base_url = os.getenv("LLM_BASE_URL")
+llm_model = os.getenv("LLM_MODEL", "gpt-3.5-turbo") # Default fallback
+
+if llm_api_key:
+    try:
+        if llm_base_url:
+            llm_client = OpenAI(api_key=llm_api_key, base_url=llm_base_url)
+        else:
+            llm_client = OpenAI(api_key=llm_api_key)
+        print(f"[Init] LLM Client Initialized using model: {llm_model}")
+    except Exception as e:
+        print(f"[Init] Failed to initialize LLM Client: {e}")
 
 # Ensure directories exist
 DIRS = [
@@ -26,14 +44,13 @@ def step1_analyze_video(url):
     """
     print(f"[*] Step 1: Analyzing {url}...")
     
-    # Check for LLM API Key
-    openai_key = os.getenv("OPENAI_API_KEY")
-    if openai_key:
-        print("    [Info] OPENAI_API_KEY found. Ready for LLM analysis.")
+    # Check for LLM Client
+    if llm_client:
+        print(f"    [Info] LLM Client ready. Using model: {llm_model}")
         # TODO: Implement actual LLM call here to summarize video content
         # For now, we still use metadata as fallback/mock
     else:
-        print("    [Info] OPENAI_API_KEY not found. Using metadata fallback.")
+        print("    [Info] LLM Client not configured. Using metadata fallback.")
 
     # If it's not a valid URL, just use the string as description
     if not url.startswith('http'):
@@ -100,6 +117,14 @@ def step2_generate_characters(description):
     # Mocking character extraction from description
     # In a real app, LLM would extract names. Here we pick a generic one.
     char_name = "Protagonist"
+    if llm_client:
+        # Example of how LLM would be used to extract character name
+        # response = llm_client.chat.completions.create(
+        #     model=llm_model,
+        #     messages=[{"role": "user", "content": f"Extract main character name from: {description}"}]
+        # )
+        # char_name = response.choices[0].message.content
+        pass
     
     # Generate Image
     img_path = f"charectorImages/charectorImage_{char_name}.jpg"

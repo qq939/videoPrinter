@@ -50,7 +50,7 @@ This project is an automated video generation pipeline ("Video Printer") that co
 - **Input**: User prompt + Video Description (Step 1).
 - **Action**: Generate a sequence of short scripts (3-5 seconds each).
 - **Output**: `scripts/script_{index}.txt`.
-- **Model**: **LLM** (e.g., OpenAI GPT-4).
+- **Model**: **LLM** (Recommended: Moonshot AI / DeepSeek / Zhipu AI via OpenAI-compatible API).
 
 ### Step 5: Frame Generation
 - **Input**: Scene scripts (Step 4) + Character/Background assets (Step 2 & 3).
