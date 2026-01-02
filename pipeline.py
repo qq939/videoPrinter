@@ -5,6 +5,10 @@ from PIL import Image, ImageDraw, ImageFont
 from moviepy import ImageClip, concatenate_videoclips, AudioFileClip, TextClip, CompositeVideoClip
 import time
 import random
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Ensure directories exist
 DIRS = [
@@ -18,9 +22,19 @@ def step1_analyze_video(url):
     """
     Step 1: Analyze URL video content.
     Uses yt-dlp to fetch metadata as a proxy for 'analysis'.
+    Future: Use LLM to analyze the transcript/video content.
     """
     print(f"[*] Step 1: Analyzing {url}...")
     
+    # Check for LLM API Key
+    openai_key = os.getenv("OPENAI_API_KEY")
+    if openai_key:
+        print("    [Info] OPENAI_API_KEY found. Ready for LLM analysis.")
+        # TODO: Implement actual LLM call here to summarize video content
+        # For now, we still use metadata as fallback/mock
+    else:
+        print("    [Info] OPENAI_API_KEY not found. Using metadata fallback.")
+
     # If it's not a valid URL, just use the string as description
     if not url.startswith('http'):
         description = f"User provided text input: {url}"
@@ -78,12 +92,21 @@ def _generate_placeholder_image(filename, text, bg_color=(0, 0, 0), text_color=(
 def step2_generate_characters(description):
     """Step 2: Generate character images and classes."""
     print("[*] Step 2: Generating characters...")
+    
+    # Check for Image/Audio Gen API Keys
+    # image_key = os.getenv("STABILITY_API_KEY") or os.getenv("OPENAI_API_KEY")
+    # audio_key = os.getenv("ELEVENLABS_API_KEY")
+    
     # Mocking character extraction from description
     # In a real app, LLM would extract names. Here we pick a generic one.
     char_name = "Protagonist"
     
     # Generate Image
     img_path = f"charectorImages/charectorImage_{char_name}.jpg"
+    
+    # TODO: Call actual Image Gen API here
+    # response = generate_image(prompt=f"Character {char_name} based on {description}")
+    # save_image(response, img_path)
     _generate_placeholder_image(img_path, f"CHARACTER: {char_name}\n(Generated from video analysis)", bg_color=(50, 50, 150))
     
     # Generate Class File
@@ -92,6 +115,7 @@ class {char_name}:
     def __init__(self):
         self.name = "{char_name}"
         self.image_path = "{img_path}"
+        # self.voice_id = generate_voice_id("{char_name}") # Future: ElevenLabs integration
 """
     with open(f"charectors/{char_name}.py", 'w') as f:
         f.write(class_content)
@@ -104,6 +128,8 @@ def step3_generate_backgrounds(description):
     bg_name = "MainScene"
     
     img_path = f"backgroundImages/background_{bg_name}.jpg"
+    
+    # TODO: Call actual Image Gen API here
     _generate_placeholder_image(img_path, f"BACKGROUND: {bg_name}\n(Cyberpunk/Tech Style)", bg_color=(20, 20, 20))
     
     class_content = f"""
@@ -111,6 +137,7 @@ class {bg_name}:
     def __init__(self):
         self.name = "{bg_name}"
         self.image_path = "{img_path}"
+        # self.ambient_sound = generate_ambient("{bg_name}") # Future: Audio Gen integration
 """
     with open(f"backgrounds/{bg_name}.py", 'w') as f:
         f.write(class_content)
@@ -154,12 +181,21 @@ def step5_generate_frames(script_files):
 def step6_generate_footages(frames):
     """Step 6: Generate video footages from frames."""
     print("[*] Step 6: Generating footages...")
+    
+    # Check for Video Gen API Key
+    # video_key = os.getenv("RUNWAY_API_KEY") or os.getenv("LUMA_API_KEY")
+    
     footages = []
     for i, frame_path in enumerate(frames):
         idx = i + 1
         footage_path = f"footages/footage_{idx}.mp4"
         
-        # Create a 3-second clip from the image
+        # TODO: Call actual Video Gen AI here (e.g., Runway/SVD)
+        # The prompt would be the script content for that scene
+        # response = generate_video(image=frame_path, prompt=script_content)
+        # save_video(response, footage_path)
+        
+        # Fallback: Create a 3-second clip from the image using MoviePy
         clip = ImageClip(frame_path, duration=3).with_fps(24)
         clip.write_videofile(footage_path, codec="libx264", audio=False, logger=None)
         

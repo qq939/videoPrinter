@@ -9,3 +9,4 @@ yt-dlp
 moviepy
 Pillow
 python-dotenv
+openai

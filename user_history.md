@@ -24,3 +24,15 @@
     7. Video Merging (MoviePy concatenate).
 - Integrated pipeline into `app.py`.
 - Verified pipeline execution successfully.
+
+### Question: ；projectrules写的还不是很完善，根据当前文件夹结构，补充完善。scripts需要大语言模型，backgrounds需要生图模型和声音模型，charectors需要生图模型和声音模型，footage是需要视频生成ai的，用你需要的模型来生成，以后的token放到.env文件中，然后写一个.env.example的样例
+
+**Worknote:**
+- Updated `.trae/rules/projectrules.md` to reflect the specific AI model requirements for each step (LLM, Image, Audio, Video) and accurate directory structure.
+- Created `.env.example` with placeholders for `OPENAI_API_KEY`, `ELEVENLABS_API_KEY`, `RUNWAY_API_KEY`, etc.
+- Updated `pipeline.py` to:
+    - Load environment variables using `dotenv`.
+    - Check for `OPENAI_API_KEY` in Step 1.
+    - Added placeholders/TODOs for Image Gen, Audio Gen, and Video Gen API calls in respective steps.
+    - Maintained the fallback/mock logic so the pipeline remains runnable without keys.
+- Added `openai` to `requirements.txt` and installed it.
