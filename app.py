@@ -4,6 +4,8 @@ import os
 app = Flask(__name__)
 
 
+import pipeline
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     substitutions = ""
@@ -12,32 +14,28 @@ def index():
         url = request.form.get('url')
         prompt = request.form.get('prompt')
         
-        # 1. Analyze and Generate Script
-        script_content = generate_script(url, prompt)
-        substitutions = script_content # Show script in the debug area
-        
-        # 2. Generate Video
-        video_path = generate_video(script_content)
-        
-        if video_path:
-            video_url = url_for('static', filename='output.mp4')
+        # Run the full pipeline
+        # This will block until completion
+        try:
+            output_path = pipeline.run_pipeline(url, prompt)
+            
+            # Read the generated script to show in the UI
+            if os.path.exists('scripts/1video_description.txt'):
+                with open('scripts/1video_description.txt', 'r', encoding='utf-8') as f:
+                    substitutions = f.read()
+            else:
+                substitutions = "Pipeline finished, but description file not found."
+
+            if output_path and os.path.exists(output_path):
+                video_url = url_for('static', filename='output.mp4')
+                
+        except Exception as e:
+            substitutions = f"Error during pipeline execution: {str(e)}"
         
         return render_template('index.html', substitutions=substitutions, video_url=video_url)
         
     
     return render_template('index.html', substitutions=substitutions, video_url=video_url)
-
-def generate_script(url, prompt):
-    # TODO: Use LLM or other tools to analyze URL and generate script
-    # For now, return a mock script
-    return f"Title: Video based on {url}\n\nScene 1: {prompt}\n(Visual: A hacker typing code)\n(Audio: Keyboard sound)\n..."
-
-def generate_video(script_content):
-    # TODO: Call video generation tool (e.g., MoneyPrinter)
-    # For now, check if dummy video exists
-    if os.path.exists('static/output.mp4'):
-        return 'static/output.mp4'
-    return None
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
