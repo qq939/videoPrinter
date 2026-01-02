@@ -29,8 +29,22 @@
             </div>
         </div>
         
-        <!-- 其他 15 个格子占位 -->
-        {% for i in range(2, 17) %}
+        <!-- 格子 2: 视频输出 -->
+        <div class="grid-item item-2">
+            <div class="grid-content">
+                {% if video_url %}
+                    <video width="100%" height="100%" controls>
+                        <source src="{{ video_url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% else %}
+                    <span class="placeholder">SECTOR 02</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 其他 14 个格子占位 -->
+        {% for i in range(3, 17) %}
         <div class="grid-item item-{{ i }}">
             <div class="grid-content">
                 <span class="placeholder">SECTOR {{ "%02d"|format(i) }}</span>

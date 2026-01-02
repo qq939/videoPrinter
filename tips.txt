@@ -1,0 +1,20 @@
+# VSCode Tips for Mac
+
+- **General Shortcuts:**
+    - `Cmd + P`: Quick Open (Go to file).
+    - `Cmd + Shift + P`: Show Command Palette.
+    - `Cmd + B`: Toggle Sidebar.
+    - `Cmd + J`: Toggle Panel (Terminal/Output).
+    - `Cmd + /`: Toggle Line Comment.
+    - `Option + Up/Down`: Move line up/down.
+    - `Option + Shift + Up/Down`: Copy line up/down.
+    - `Cmd + D`: Select next occurrence of current selection.
+
+- **Code Completion:**
+    - `Tab`: Accept suggestion.
+    - `Ctrl + Space`: Trigger suggestion manually.
+    - `Cmd + .`: Quick Fix / Refactor.
+
+- **Multi-cursor:**
+    - `Option + Click`: Add cursor.
+    - `Cmd + Option + Up/Down`: Add cursor above/below.
